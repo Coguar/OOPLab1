@@ -2,13 +2,8 @@
 //
 
 #include "stdafx.h"
-#include <stdio.h>
-#include <conio.h>
-#include <locale.h>
 #include <io.h>
 #include <fstream>
-#include <ostream>
-#include <iostream>
 #include <string>
 #include <sys/stat.h>
 
