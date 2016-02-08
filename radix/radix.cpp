@@ -110,6 +110,7 @@ bool isMinus(char * num, std::string & absNumber)
 		absNumber = number;
 		return 1;
 	}
+	absNumber = number;
 	return 0;
 }
 
