@@ -9,7 +9,7 @@
 
 const int64_t MAX_SIZE = 8589934592 * 2;
 
-bool isNormalSize(char  * inputFile) 
+bool IsNormalSize(char  * inputFile) 
 {
 	struct stat fi;
 	stat(inputFile, &fi);
@@ -32,6 +32,7 @@ void RewriteWithoutReplace(char * outputFile, char  * inputFile)
 void RewriteAndReplace(char * outputFile, char  * inputFile, char * word, char * wordToReplace)
 {
 	std::string line;
+	std::string newLine;
 	std::ifstream input(inputFile);
 	std::ofstream output(outputFile);
 
@@ -42,12 +43,19 @@ void RewriteAndReplace(char * outputFile, char  * inputFile, char * word, char *
 
 	while (std::getline(input, line))
 	{
-		while ((pos = line.find(findWord)) != std::string::npos) 
+		for (int i = 0; i < line.length();)
 		{
-			output << line.substr(0, pos) << newWord;
-			line.erase(0, pos + findWord.length());
+			if (i <= line.length() - findWord.length() && line.substr(i, findWord.length()) == findWord)
+			{
+				i += findWord.length();
+				output << newWord;
+			}
+			else
+			{
+				output << line[i];
+				i++;
+			}
 		}
-		output << line;
 	}
 	input.close();
 	output.close();
@@ -78,7 +86,14 @@ int main(int argc, char * argv[])
 
 	if (argc < 4)
 	{
-		printf("Error! Not enough arguments.");
+		if (argc == 2 && std::string(argv[1]) == "help")
+		{
+			printf("replace.exe <InputFile> <OutputFile> <ToFind> <ToReplace>");
+		}
+		else
+		{
+			printf("Error! Not enough arguments.");
+		}
 		return 0;
 	}
 	else if (argc > 5)
@@ -96,7 +111,7 @@ int main(int argc, char * argv[])
 		return 0;
 	}
 	else {
-		if (isNormalSize(argv[1]))
+		if (IsNormalSize(argv[1]))
 		{
 			if (argc == 5) {
 				RewriteAndReplace(argv[2], argv[1], argv[3], argv[4]);
